@@ -1,6 +1,6 @@
 DoScreenFadeIn(100)
 
-QBCore = exports['qb-core']:GetCoreObject()
+QBCore = exports['qbr-core']:GetCoreObject()
 
 inBedDict = "misslamar1dead_body"
 inBedAnim = "dead_idle"
@@ -342,7 +342,7 @@ AddEventHandler('hospital:client:SendBillEmail', function(amount)
             gender = "Mrs."
         end
         local charinfo = QBCore.Functions.GetPlayerData().charinfo
-        TriggerServerEvent('qb-phone:server:sendNewMail', {
+        TriggerServerEvent('qbr-phone:server:sendNewMail', {
             sender = "Pillbox",
             subject = "Hospital Costs",
             message = "Dear " .. gender .. " " .. charinfo.lastname .. ",<br /><br />Hereby you received an email with the costs of the last hospital visit.<br />The final costs have become: <strong>$"..amount.."</strong><br /><br />We wish you a quick recovery!",

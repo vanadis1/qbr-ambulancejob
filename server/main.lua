@@ -1,6 +1,6 @@
 local PlayerInjuries = {}
 local PlayerWeaponWounds = {}
-local QBCore = exports['qb-core']:GetCoreObject()
+local QBCore = exports['qbr-core']:GetCoreObject()
 -- Events
 
 RegisterNetEvent('hospital:server:SendToBed', function(bedId, isRevive)
@@ -9,7 +9,7 @@ RegisterNetEvent('hospital:server:SendToBed', function(bedId, isRevive)
 	TriggerClientEvent('hospital:client:SendToBed', src, bedId, Config.Locations["beds"][bedId], isRevive)
 	TriggerClientEvent('hospital:client:SetBed', -1, bedId, true)
 	Player.Functions.RemoveMoney("bank", Config.BillCost , "respawned-at-hospital")
-	TriggerEvent('qb-bossmenu:server:addAccountMoney', "ambulance", Config.BillCost)
+	TriggerEvent('qbr-bossmenu:server:addAccountMoney', "ambulance", Config.BillCost)
 	TriggerClientEvent('hospital:client:SendBillEmail', src, Config.BillCost)
 end)
 
@@ -24,7 +24,7 @@ RegisterNetEvent('hospital:server:RespawnAtHospital', function()
 			exports.oxmysql:execute('UPDATE players SET inventory = ? WHERE citizenid = ?', { json.encode({}), Player.PlayerData.citizenid })
 		end
 		Player.Functions.RemoveMoney("bank", Config.BillCost, "respawned-at-hospital")
-		TriggerEvent('qb-bossmenu:server:addAccountMoney', "ambulance", Config.BillCost)
+		TriggerEvent('qbr-bossmenu:server:addAccountMoney', "ambulance", Config.BillCost)
 		TriggerClientEvent('QBCore:Notify', src, 'All your possessions have been taken..', 'error')
 		TriggerClientEvent('hospital:client:SendBillEmail', src, Config.BillCost)
 		return
@@ -139,7 +139,7 @@ RegisterNetEvent('hospital:server:MakeDeadCall', function(blipSettings, gender, 
 
 	if street2 then
 		TriggerClientEvent("112:client:SendAlert", -1, "A ".. genderstr .." is injured at " ..street1 .. " "..street2, blipSettings)
-		TriggerClientEvent('qb-policealerts:client:AddPoliceAlert', -1, {
+		TriggerClientEvent('qbr-policealerts:client:AddPoliceAlert', -1, {
             timeOut = 5000,
             alertTitle = "Injured person",
             details = {
@@ -156,7 +156,7 @@ RegisterNetEvent('hospital:server:MakeDeadCall', function(blipSettings, gender, 
         }, true)
 	else
 		TriggerClientEvent("112:client:SendAlert", -1, "A ".. genderstr .." is injured at "..street1, blipSettings)
-		TriggerClientEvent('qb-policealerts:client:AddPoliceAlert', -1, {
+		TriggerClientEvent('qbr-policealerts:client:AddPoliceAlert', -1, {
             timeOut = 5000,
             alertTitle = "Injured person",
             details = {
