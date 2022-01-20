@@ -4,57 +4,55 @@ Config.MinimalDoctors = 2
 Config.WipeInventoryOnRespawn = true
 
 Config.Locations = {
-    ["checking"] = vector4(309.08, -592.91, 43.28, 0.0),
+    ["checking"] = vector4(-286.28, 804.77, 119.38, 104.89), -- Valentine
     ["duty"] = {
-        [1] = vector4(304.27, -600.33, 43.28, 0.0),
-        [2] = vector4(-254.88, 6324.5, 32.58, 0.0),
+        [1] = vector4(-284.49, 807.49, 119.38, 5.67),   -- Valentine
+        [2] = vector4(-254.88, 6324.5, 32.58, 0.0),     -- not used yet
     },    
     ["vehicle"] = {
-        [1] = vector4(294.578, -574.761, 43.179, 35.792),
-        [2] = vector4(-234.28, 6329.16, 32.15, 222.5),
-    },
-    ["helicopter"] = {
-        [1] = vector4(351.58, -587.45, 74.16, 160.5),
-        [2] = vector4(-475.43, 5988.353, 31.716, 31.34),
+        [1] = vector4(-387.12, 775.3, 115.79, 189.93), -- Valentine Stable
+        [2] = vector4(-293.36, 788.99, 118.47, 99.22), -- Test in Valentine
     },    
     ["armory"] = {
-        [1] = vector4(306.26, -601.7, 43.28, 90.654),
-        [2] = vector4(-245.13, 6315.71, 32.82, 90.654),
-    },
-    ["roof"] = {
-        [1] = vector4(338.5, -583.85, 74.16, 245.5),
-    },
-    ["main"] = {
-        [1] = vector4(332.51, -595.74, 43.28, 76.0),
+        [1] = vector4(-289.913, 816.26, 119.38, 8.51), -- Valentine 
     },        
     ["beds"] = {
-        [1] = {coords = vector4(311.13, -582.89, 43.53, 335.65), taken = false, model = 1631638868},
-        [2] = {coords = vector4(313.96, -579.05, 43.53, 164.5), taken = false, model = 1631638868},
-        [3] = {coords = vector4(314.58, -584.09, 43.53, 335.65), taken = false, model = 1631638868},
-        [4] = {coords = vector4(317.74, -585.29, 43.53, 335.65), taken = false, model = 1631638868},
-        [5] = {coords = vector4(319.47, -581.04, 43.53, 164.5), taken = false, model = 1631638868}, 
-        [6] = {coords = vector4(366.43, -581.54, 43.28, 66.5), taken = false, model = 1631638868}, 
-        [7] = {coords = vector4(364.93, -585.86, 43.28, 67.5), taken = false, model = 1631638868}, 
-        [8] = {coords = vector4(363.82, -589.09, 43.28, 68.5), taken = false, model = 1631638868},
+        [1] = {coords = vector4(-282.19, 814.46, 118.9, 96.10), taken = false, model = -2121768533}, -- Valentine 1
+        [2] = {coords = vector4(-284.01, 813.39, 118.9, 5.67), taken = false, model = -2121768533}, -- Valentine 2
+    },
+    ["stations"] = {
+        [1] = {label = "Valentine Hospital", coords = vector4(-286.28, 804.77, 119.38, 104.89)}
     }
 }
-
-Config.Vehicles = {
-    ["ambulance"] = "Ambulance",
+Config.AuthorizedVehicles = {
+	-- Grade 0
+	[0] = {
+		["CHUCKWAGON000X"] = "Chuckwagon",
+	},
+	-- Grade 1
+	[1] = {
+		["CHUCKWAGON000X"] = "Chuckwagon",
+	},
+	-- Grade 2
+	[2] = {
+		["CHUCKWAGON000X"] = "Chuckwagon",
+	},
+	-- Grade 3
+	[3] = {
+		["CHUCKWAGON000X"] = "Chuckwagon",
+	},
+	-- Grade 4
+	[4] = {
+		["CHUCKWAGON000X"] = "Chuckwagon",
+	}
 }
-
-Config.Whitelist = {
-    "GAA35566",
-}
-
-Config.Helicopter = "polmav"
 
 Config.Items = {
     label = "Hospital safe",
     slots = 30,
     items = {
         [1] = {
-            name = "radio",
+            name = "bandage",
             price = 0,
             amount = 50,
             info = {},
@@ -62,41 +60,17 @@ Config.Items = {
             slot = 1,
         },
         [2] = {
-            name = "bandage",
-            price = 0,
-            amount = 50,
-            info = {},
-            type = "item",
-            slot = 2,
-        },
-        [3] = {
             name = "painkillers",
             price = 0,
             amount = 50,
             info = {},
             type = "item",
-            slot = 3,
-        },
-        [4] = {
-            name = "weapon_flashlight",
-            price = 0,
-            amount = 50,
-            info = {},
-            type = "item",
-            slot = 4,
-        },
-        [5] = {
-            name = "weapon_fireextinguisher",
-            price = 0,
-            amount = 50,
-            info = {},
-            type = "item",
-            slot = 5,
-        },
+            slot = 2,
+        }
     }
 }
 
-Config.BillCost = 2000
+Config.BillCost = 200
 Config.DeathTime = 300
 Config.CheckTime = 10
 
