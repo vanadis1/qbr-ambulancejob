@@ -21,7 +21,7 @@ RegisterNetEvent('hospital:server:RespawnAtHospital', function()
 		TriggerClientEvent('hospital:client:SetBed', -1, k, true)
 		if Config.WipeInventoryOnRespawn then
 			Player.Functions.ClearInventory()
-			exports.oxmysql:execute('UPDATE players SET inventory = ? WHERE citizenid = ?', { json.encode({}), Player.PlayerData.citizenid })
+			MySQL.Async.fetchAll('UPDATE players SET inventory = ? WHERE citizenid = ?', { json.encode({}), Player.PlayerData.citizenid })
 		end
 		Player.Functions.RemoveMoney("bank", Config.BillCost, "respawned-at-hospital")
 		TriggerEvent('qbr-bossmenu:server:addAccountMoney', "ambulance", Config.BillCost)
