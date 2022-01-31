@@ -1,12 +1,10 @@
-DoScreenFadeIn(100)
-
 QBCore = exports['qbr-core']:GetCoreObject()
 
-inBedDict = "misslamar1dead_body"
-inBedAnim = "dead_idle"
+inBedDict = "script_common@dead@male"
+inBedAnim = "faceup_01"
 
-local getOutDict = 'switch@franklin@bed'
-local getOutAnim = 'sleep_getup_rubeyes'
+local getOutDict = 'script_re@campfire_massacre'
+local getOutAnim = 'cry_getup_man'
 
 isInHospitalBed = false
 canLeaveBed = true
@@ -49,6 +47,15 @@ BodyParts = {
     ['RLEG'] = { label = 'right leg', causeLimp = true, isDamaged = false, severity = 0 },
     ['RFOOT'] = { label = 'right foot', causeLimp = true, isDamaged = false, severity = 0 },
 }
+
+Citizen.CreateThread(function()
+    for k, v in pairs(Config.Locations["stations"]) do
+        local StationBlip = N_0x554d9d53f696d002(1664425300, v.coords)
+        SetBlipSprite(StationBlip, 3599598875, 52)
+        SetBlipScale(StationBlip, 0.2)
+        Citizen.InvokeNative(0x9CB1A1623062F402, tonumber(StationBlip), v.label)
+    end     
+end)
 
 CreateThread(function()
     while true do
@@ -137,11 +144,11 @@ CreateThread(function()
 
             if #(pos - vector3(Config.Locations["checking"].x, Config.Locations["checking"].y, Config.Locations["checking"].z)) < 1.5 then
                 if doctorCount >= Config.MinimalDoctors then
-                    QBCore.Functions.DrawText3D(Config.Locations["checking"].x, Config.Locations["checking"].y, Config.Locations["checking"].z, "~g~E~w~ - Call doctor")
+                    DrawText3D(Config.Locations["checking"].x, Config.Locations["checking"].y, Config.Locations["checking"].z, "~g~E~w~ - Call doctor")
                 else
-                    QBCore.Functions.DrawText3D(Config.Locations["checking"].x, Config.Locations["checking"].y, Config.Locations["checking"].z, "~g~E~w~ - Check in")
+                    DrawText3D(Config.Locations["checking"].x, Config.Locations["checking"].y, Config.Locations["checking"].z, "~g~E~w~ - Check in")
                 end
-                if IsControlJustReleased(0, 38) then
+                if IsControlJustPressed(0, 0xCEFD9220) then
                     if doctorCount >= Config.MinimalDoctors then
                         TriggerServerEvent("hospital:server:SendDoctorAlert")
                     else
@@ -176,7 +183,7 @@ CreateThread(function()
             if closestBed and not isInHospitalBed then
                 if #(pos - vector3(Config.Locations["beds"][closestBed].coords.x, Config.Locations["beds"][closestBed].coords.y, Config.Locations["beds"][closestBed].coords.z)) < 1.5 then
                     DrawText3D(Config.Locations["beds"][closestBed].coords.x, Config.Locations["beds"][closestBed].coords.y, Config.Locations["beds"][closestBed].coords.z + 0.3, "~g~E~w~ - To lie in bed")
-                    if IsControlJustReleased(0, 38) then
+                    if IsControlJustPressed(0, 0xCEFD9220) then
                         if GetAvailableBed(closestBed) then
                             TriggerServerEvent("hospital:server:SendToBed", closestBed, false)
                         else
@@ -214,8 +221,8 @@ CreateThread(function()
             sleep = 5
             if isInHospitalBed and canLeaveBed then
                 local pos = GetEntityCoords(PlayerPedId())
-                QBCore.Functions.DrawText3D(pos.x, pos.y, pos.z, "~g~E~w~ - To get out of bed..")
-                if IsControlJustReleased(0, 38) then
+                DrawText3D(pos.x, pos.y, pos.z, "~g~E~w~ - To get out of bed..")
+                if IsControlJustReleased(0, 0xCEFD9220) then
                     LeaveBed()
                 end
             end
@@ -313,7 +320,7 @@ AddEventHandler('hospital:client:SendToBed', function(id, data, isRevive)
     SetBedCam()
     CreateThread(function ()
         Wait(5)
-        if isRevive then
+        if not isRevive then
             QBCore.Functions.Notify("You are being helped..")
             Wait(Config.AIHealTimer * 1000)
             TriggerEvent("hospital:client:Revive")
@@ -365,8 +372,8 @@ AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     TriggerServerEvent("hospital:server:SetDoctor")
     CreateThread(function()
         Wait(5000)
-        SetEntityMaxHealth(ped, 300)
-        SetEntityHealth(ped, 300)
+        SetEntityMaxHealth(ped, 200)
+        SetEntityHealth(ped, 200)
     end)
     CreateThread(function()
         Wait(1000)
@@ -569,7 +576,7 @@ function SetBedCam()
     local player = PlayerPedId()
 
     DoScreenFadeOut(1000)
-
+    
     while not IsScreenFadedOut() do
         Wait(100)
     end
@@ -582,15 +589,13 @@ function SetBedCam()
     bedObject = GetClosestObjectOfType(bedOccupyingData.coords.x, bedOccupyingData.coords.y, bedOccupyingData.coords.z, 1.0, bedOccupyingData.model, false, false, false)
     FreezeEntityPosition(bedObject, true)
 
-    SetEntityCoords(player, bedOccupyingData.coords.x, bedOccupyingData.coords.y, bedOccupyingData.coords.z + 0.02)
+    SetEntityCoords(player, bedOccupyingData.coords.x, bedOccupyingData.coords.y, bedOccupyingData.coords.z + 1.0)
     Wait(500)
-    FreezeEntityPosition(player, true)
-
-    loadAnimDict(inBedDict)
-
-    TaskPlayAnim(player, inBedDict , inBedAnim, 8.0, 1.0, -1, 1, 0, 0, 0, 0 )
     SetEntityHeading(player, bedOccupyingData.coords.w)
-
+    FreezeEntityPosition(player, true)
+    loadAnimDict(inBedDict)
+    TaskPlayAnim(player, inBedDict , inBedAnim, 8.0, 1.0, -1, 1, 0, 0, 0, 0 )
+    
     cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
     SetCamActive(cam, true)
     RenderScriptCams(true, false, 1, true, true)
@@ -611,7 +616,7 @@ function LeaveBed()
 
     FreezeEntityPosition(player, false)
     SetEntityInvincible(player, false)
-    SetEntityHeading(player, bedOccupyingData.coords.w + 90)
+    SetEntityHeading(player, bedOccupyingData.coords.w - 90)
     TaskPlayAnim(player, getOutDict , getOutAnim, 100.0, 1.0, -1, 8, -1, 0, 0, 0)
     Wait(4000)
     ClearPedTasks(player)
