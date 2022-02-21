@@ -1,5 +1,5 @@
-local deadAnimDict = "dead"
-local deadAnim = "dead_a"
+local deadAnimDict = "ai_damage@dead@base"
+local deadAnim = "dead_e"
 local hold = 5
 deathTime = 0
 

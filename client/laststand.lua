@@ -1,6 +1,6 @@
 InLaststand = false
 LaststandTime = 0
-lastStandDict = "combat@damage@writhe"
+lastStandDict = "ai_combat@damage@writhe@base"
 lastStandAnim = "writhe_loop"
 isEscorted = false
 local isEscorting = false
