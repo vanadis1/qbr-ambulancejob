@@ -1,3 +1,4 @@
+local sharedItems = exports['qbr-core']:GetItems()
 local prevPos = nil
 onPainKillers = false
 local painkillerAmount = 0
@@ -53,7 +54,7 @@ RegisterNetEvent('hospital:client:UseIfaks', function()
     }, {}, {}, function() -- Done
         StopAnimTask(ped, IfaksDict, IfaksAnim, 1.0)
         TriggerServerEvent("QBCore:Server:RemoveItem", "ifaks", 1)
-        TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["ifaks"], "remove")
+        TriggerEvent("inventory:client:ItemBox", sharedItems["ifaks"], "remove")
         TriggerServerEvent('hud:server:RelieveStress', math.random(12, 24))
         SetEntityHealth(ped, GetEntityHealth(ped) + 10)
         onPainKillers = true
@@ -83,7 +84,7 @@ RegisterNetEvent('hospital:client:UseBandage', function()
     }, {}, {}, function() -- Done
         StopAnimTask(ped, BandageDict, BandageAnim, 1.0)
         TriggerServerEvent("QBCore:Server:RemoveItem", "bandage", 1)
-        TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["bandage"], "remove")
+        TriggerEvent("inventory:client:ItemBox", sharedItems["bandage"], "remove")
         SetEntityHealth(ped, GetEntityHealth(ped) + 10)
         if math.random(1, 100) < 50 then
             RemoveBleed(1)
@@ -111,7 +112,7 @@ RegisterNetEvent('hospital:client:UsePainkillers', function()
     }, {}, {}, function() -- Done
         StopAnimTask(ped, PainkillersDict, PainkillersAnim, 1.0)
         TriggerServerEvent("QBCore:Server:RemoveItem", "painkillers", 1)
-        TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["painkillers"], "remove")
+        TriggerEvent("inventory:client:ItemBox", sharedItems["painkillers"], "remove")
         onPainKillers = true
         if painkillerAmount < 3 then
             painkillerAmount = painkillerAmount + 1

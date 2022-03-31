@@ -1,7 +1,7 @@
 local deadAnimDict = "ai_damage@dead@base"
 local deadAnim = "dead_e"
 deathTime = 0
-
+local sharedWeapons = exports['qbr-core']:GetWeapons()
 -- Functions
 local function loadAnimDict(dict)
     while (not HasAnimDictLoaded(dict)) do
@@ -39,10 +39,10 @@ function OnDeath()
             else
                 NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z + 0.5, heading, true, false)
             end
-			
+
             SetEntityInvincible(player, true)
             SetEntityHealth(player, GetEntityMaxHealth(player))
-            
+
             --TODO Animations
             if IsPedInAnyVehicle(player, false) then
                 loadAnimDict("veh@low@front_ps@idle_duck")
@@ -72,7 +72,7 @@ function DeathTimer()
 end
 
 function DrawTxt(str, x, y, w, h, enableShadow, col1, col2, col3, a, centre)
-    local str = CreateVarString(10, "LITERAL_STRING", str)    
+    local str = CreateVarString(10, "LITERAL_STRING", str)
     SetTextScale(w, h)
     SetTextColor(math.floor(col1), math.floor(col2), math.floor(col3), math.floor(a))
     SetTextCentre(centre)
@@ -103,7 +103,7 @@ CreateThread(function()
                 local killerName = killerId ~= -1 and GetPlayerName(killerId) .. " " .. "("..GetPlayerServerId(killerId)..")" or Lang:t('info.self_death')
                 local weaponLabel = Lang:t('info.wep_unknown')
                 local weaponName = Lang:t('info.wep_unknown')
-                local weaponItem = QBCore.Shared.Weapons[killerWeapon]
+                local weaponItem = sharedWeapons[killerWeapon]
                 if weaponItem then
                     weaponLabel = weaponItem.label
                     weaponName = weaponItem.name
@@ -128,7 +128,7 @@ CreateThread(function()
             DisableAllControlActions(0)
 			EnableControlAction(0, 0x9720FCEE, true)   -- T
             EnableControlAction(0, 0xCEFD9220, true)    -- E
-            EnableControlAction(0, 0x760A9C6F, true)    -- G 
+            EnableControlAction(0, 0x760A9C6F, true)    -- G
 
             if isDead then
                 if not isInHospitalBed then

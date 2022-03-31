@@ -7,7 +7,7 @@ lastStandDict = "ai_combat@damage@writhe@base"
 lastStandAnim = "writhe_loop"
 isEscorted = false
 local isEscorting = false
-
+local sharedWeapons = exports['qbr-core']:GetWeapons()
 -- Functions
 local function GetClosestPlayer()
     local closestPlayers = exports['qbr-core']:GetPlayersFromCoords()
@@ -105,7 +105,7 @@ function SetLaststand(bool, spawn)
                     local killerName = killerId ~= -1 and GetPlayerName(killerId) .. " " .. "("..GetPlayerServerId(killerId)..")" or Lang:t('info.self_death')
                     local weaponLabel = Lang:t('info.wep_unknown')
                     local weaponName = Lang:t('info.wep_unknown')
-                    local weaponItem = QBCore.Shared.Weapons[killerWeapon]
+                    local weaponItem = sharedWeapons[killerWeapon]
                     if weaponItem then
                         weaponLabel = weaponItem.label
                         weaponName = weaponItem.name

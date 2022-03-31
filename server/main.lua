@@ -1,6 +1,6 @@
 local PlayerInjuries = {}
 local PlayerWeaponWounds = {}
-
+local sharedItems = exports['qbr-core']:GetItems()
 -- Events
 
 -- Compatibility with txAdmin Menu's heal options.
@@ -120,7 +120,7 @@ RegisterNetEvent('hospital:server:TreatWounds', function(playerId)
 	if Patient then
 		if Player.PlayerData.job.name =="ambulance" then
 			Player.Functions.RemoveItem('bandage', 1)
-			TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['bandage'], "remove")
+			TriggerClientEvent('inventory:client:ItemBox', src, sharedItems['bandage'], "remove")
 			TriggerClientEvent("hospital:client:HealInjuries", Patient.PlayerData.source, "full")
 		end
 	end
@@ -146,14 +146,14 @@ RegisterNetEvent('hospital:server:RevivePlayer', function(playerId, isOldMan)
 		if oldMan then
 			if Player.Functions.RemoveMoney("cash", 5000, "revived-player") then
 				Player.Functions.RemoveItem('firstaid', 1)
-				TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['firstaid'], "remove")
+				TriggerClientEvent('inventory:client:ItemBox', src, sharedItems['firstaid'], "remove")
 				TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)
 			else
 				TriggerClientEvent('QBCore:Notify', src, Lang:t('error.not_enough_money'), "error")
 			end
 		else
 			Player.Functions.RemoveItem('firstaid', 1)
-			TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['firstaid'], "remove")
+			TriggerClientEvent('inventory:client:ItemBox', src, sharedItems['firstaid'], "remove")
 			TriggerClientEvent('hospital:client:Revive', Patient.PlayerData.source)
 		end
 	end
@@ -233,7 +233,7 @@ end)
 
 -- Commands
 
-QBCore.Commands.Add('911e', Lang:t('info.ems_report'), {{name = 'message', help = Lang:t('info.message_sent')}}, false, function(source, args)
+exports['qbr-core']:AddCommand('911e', Lang:t('info.ems_report'), {{name = 'message', help = Lang:t('info.message_sent')}}, false, function(source, args)
 	local src = source
 	if args[1] then message = table.concat(args, " ") else message = Lang:t('info.civ_call') end
     local ped = GetPlayerPed(src)
@@ -246,7 +246,7 @@ QBCore.Commands.Add('911e', Lang:t('info.ems_report'), {{name = 'message', help 
     end
 end)
 
-QBCore.Commands.Add("status", Lang:t('info.check_health'), {}, false, function(source, args)
+exports['qbr-core']:AddCommand("status", Lang:t('info.check_health'), {}, false, function(source, args)
 	local src = source
 	local Player = exports['qbr-core']:GetPlayer(src)
 	if Player.PlayerData.job.name == "ambulance" then
@@ -256,7 +256,7 @@ QBCore.Commands.Add("status", Lang:t('info.check_health'), {}, false, function(s
 	end
 end)
 
-QBCore.Commands.Add("heal", Lang:t('info.heal_player'), {}, false, function(source, args)
+exports['qbr-core']:AddCommand("heal", Lang:t('info.heal_player'), {}, false, function(source, args)
 	local src = source
 	local Player = exports['qbr-core']:GetPlayer(src)
 	if Player.PlayerData.job.name == "ambulance" then
@@ -266,7 +266,7 @@ QBCore.Commands.Add("heal", Lang:t('info.heal_player'), {}, false, function(sour
 	end
 end)
 
-QBCore.Commands.Add("revivep", Lang:t('info.revive_player'), {}, false, function(source, args)
+exports['qbr-core']:AddCommand("revivep", Lang:t('info.revive_player'), {}, false, function(source, args)
 	local src = source
 	local Player = exports['qbr-core']:GetPlayer(src)
 	if Player.PlayerData.job.name == "ambulance" then
@@ -276,7 +276,7 @@ QBCore.Commands.Add("revivep", Lang:t('info.revive_player'), {}, false, function
 	end
 end)
 
-QBCore.Commands.Add("revive", Lang:t('info.revive_player_a'), {{name = "id", help = Lang:t('info.player_id')}}, false, function(source, args)
+exports['qbr-core']:AddCommand("revive", Lang:t('info.revive_player_a'), {{name = "id", help = Lang:t('info.player_id')}}, false, function(source, args)
 	local src = source
 	if args[1] then
 		local Player = exports['qbr-core']:GetPlayer(tonumber(args[1]))
@@ -290,7 +290,7 @@ QBCore.Commands.Add("revive", Lang:t('info.revive_player_a'), {{name = "id", hel
 	end
 end, "admin")
 
-QBCore.Commands.Add("setpain", Lang:t('info.pain_level'), {{name = "id", help = Lang:t('info.player_id')}}, false, function(source, args)
+exports['qbr-core']:AddCommand("setpain", Lang:t('info.pain_level'), {{name = "id", help = Lang:t('info.player_id')}}, false, function(source, args)
 	local src = source
 	if args[1] then
 		local Player = exports['qbr-core']:GetPlayer(tonumber(args[1]))
@@ -304,7 +304,7 @@ QBCore.Commands.Add("setpain", Lang:t('info.pain_level'), {{name = "id", help = 
 	end
 end, "admin")
 
-QBCore.Commands.Add("kill", Lang:t('info.kill'), {{name = "id", help = Lang:t('info.player_id')}}, false, function(source, args)
+exports['qbr-core']:AddCommand("kill", Lang:t('info.kill'), {{name = "id", help = Lang:t('info.player_id')}}, false, function(source, args)
 	local src = source
 	if args[1] then
 		local Player = exports['qbr-core']:GetPlayer(tonumber(args[1]))
@@ -318,7 +318,7 @@ QBCore.Commands.Add("kill", Lang:t('info.kill'), {{name = "id", help = Lang:t('i
 	end
 end, "admin")
 
-QBCore.Commands.Add('aheal', Lang:t('info.heal_player_a'), {{name = 'id', help = Lang:t('info.player_id')}}, false, function(source, args)
+exports['qbr-core']:AddCommand('aheal', Lang:t('info.heal_player_a'), {{name = 'id', help = Lang:t('info.player_id')}}, false, function(source, args)
 	local src = source
 	if args[1] then
 		local Player = exports['qbr-core']:GetPlayer(tonumber(args[1]))
