@@ -21,17 +21,17 @@ Config.Locations = {
     ["vehicle"] = {
         [1] = vector4(-387.12, 775.3, 115.79, 189.93), -- Valentine Stable
         [2] = vector4(2396.21, -1350.28, 45.74, 118.78), -- Saint Denis
-        [3] = vector4(-3666.87, -2643.86, -13.75, 280.63), -- Armadillo        
+        [3] = vector4(-3666.87, -2643.86, -13.75, 280.63), -- Armadillo
     },
     ["armory"] = {
-        [1] = vector3(-289.913, 816.26, 119.38), -- Valentine 
-        [2] = vector3(2382.31, -1372.55, 46.55), -- Saint Denis         
+        [1] = vector3(-289.913, 816.26, 119.38), -- Valentine
+        [2] = vector3(2382.31, -1372.55, 46.55), -- Saint Denis
         [3] = vector3(-3651.38, -2653.74, -13.45), -- Armadillo
     },
     ["stash"] = {
         [1] = vector3(-288.79, 808.83, 119.38), -- Valentine
         [2] = vector3(2378.21, -1370.32, 45.82), -- Saint Denis
-        [2] = vector3(-3648.06, -2647.18, -13.46), -- Armadillo                
+        [3] = vector3(-3648.06, -2647.18, -13.46), -- Armadillo
     },
     ["beds"] = {
         [1] = {coords = vector4(-282.19, 814.46, 118.9, 96.10), taken = false, model = -2121768533}, -- Valentine 1
@@ -306,13 +306,13 @@ Config.Bones = {
 	[32632] = 'NECK',
     [14283] = 'NECK',
 	[14284] = 'NECK',
-	[14285] = 'NECK',	 
+	[14285] = 'NECK',
     -- SPINE
     [14410] = 'SPINE',
     [14411] = 'SPINE',
 	[14412] = 'SPINE',
 	[14413] = 'SPINE',
-	[14414] = 'SPINE',    
+	[14414] = 'SPINE',
     --UPPER_BODY
     [30226] = 'UPPER_BODY',
     -- LOWER_BODY
@@ -322,7 +322,7 @@ Config.Bones = {
     [24238] = 'LARM',
     [55540] = 'LARM',
     [53562] = 'LARM',
-    [53675] = 'LARM',    
+    [53675] = 'LARM',
     -- LHAND
     [34606] = 'LHAND',
     -- LFINGER
@@ -380,14 +380,14 @@ Config.Bones = {
     [65478] = 'LLEG',
     [55120] = 'LLEG',
     -- LFOOT
-    [45454] = 'LFOOT',    
+    [45454] = 'LFOOT',
     -- RARM
     [54187] = 'RARM',
     [46065] = 'RARM',
     [46260] = 'RARM',
     [65198] = 'RARM',
     [31186] = 'RARM',
-    -- RHAND    
+    -- RHAND
     [22798] = 'RHAND',
     -- RFINGER
     [16827] = 'RFINGER',
