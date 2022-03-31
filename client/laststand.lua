@@ -10,7 +10,7 @@ local isEscorting = false
 
 -- Functions
 local function GetClosestPlayer()
-    local closestPlayers = QBCore.Functions.GetPlayersFromCoords()
+    local closestPlayers = exports['qbr-core']:GetPlayersFromCoords()
     local closestDistance = -1
     local closestPlayer = -1
     local coords = GetEntityCoords(PlayerPedId())
@@ -65,8 +65,8 @@ function SetLaststand(bool, spawn)
             end
         else
             NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z + 0.5, heading, true, false)
-        end		
-		
+        end
+
         SetEntityHealth(ped, 150)
 
         if IsPedInAnyVehicle(ped, false) then
@@ -92,7 +92,7 @@ function SetLaststand(bool, spawn)
                     LaststandTime = LaststandTime - 1
                     Config.DeathTime = LaststandTime
                 elseif LaststandTime - 1 <= 0 then
-                    QBCore.Functions.Notify(Lang:t('error.bled_out'), "error")
+                    exports['qbr-core']:Notify(Lang:t('error.bled_out'), "error")
                     SetLaststand(false)
                     local killer_2, killerWeapon = NetworkGetEntityKillerOfPlayer(player)
                     local killer = GetPedSourceOfDeath(ped)
@@ -144,7 +144,7 @@ RegisterNetEvent('hospital:client:UseFirstAid', function()
             TriggerServerEvent('hospital:server:UseFirstAid', playerId)
         end
     else
-        QBCore.Functions.Notify(Lang:t('error.impossible'), 'error')
+        exports['qbr-core']:Notify(Lang:t('error.impossible'), 'error')
     end
 end)
 
@@ -163,7 +163,7 @@ end)
 RegisterNetEvent('hospital:client:HelpPerson', function(targetId)
     local ped = PlayerPedId()
     isHealingPerson = true
-    QBCore.Functions.Progressbar("hospital_revive", Lang:t('progress.revive'), math.random(30000, 60000), false, true, {
+    exports['qbr-core']:Progressbar("hospital_revive", Lang:t('progress.revive'), math.random(30000, 60000), false, true, {
         disableMovement = false,
         disableCarMovement = false,
         disableMouse = false,
@@ -175,11 +175,11 @@ RegisterNetEvent('hospital:client:HelpPerson', function(targetId)
     }, {}, {}, function() -- Done
         isHealingPerson = false
         ClearPedTasks(ped)
-        QBCore.Functions.Notify(Lang:t('success.revived'), 'success')
+        exports['qbr-core']:Notify(Lang:t('success.revived'), 'success')
         TriggerServerEvent("hospital:server:RevivePlayer", targetId)
     end, function() -- Cancel
         isHealingPerson = false
         ClearPedTasks(ped)
-        QBCore.Functions.Notify(Lang:t('error.canceled'), "error")
+        exports['qbr-core']:Notify(Lang:t('error.canceled'), "error")
     end)
 end)

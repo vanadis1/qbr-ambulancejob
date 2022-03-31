@@ -1,4 +1,4 @@
-QBCore = exports['qbr-core']:GetCoreObject()
+
 local getOutDict = 'script_re@campfire_massacre'
 local getOutAnim = 'cry_getup_man'
 local walkHealthDict = 'arthur_healthy'
@@ -74,11 +74,11 @@ WeaponDamageList = {
 	['WEAPON_SNIPERRIFLE_ROLLINGBLOCK'] = Lang:t('damage.sniper'),
 	['WEAPON_SNIPERRIFLE_ROLLINGBLOCK_EXOTIC'] = Lang:t('damage.sniper'),
 	['WEAPON_SNIPERRIFLE_CARCANO'] = Lang:t('damage.sniper'),
-	['WEAPON_BOW'] = Lang:t('damage.bow'),				
+	['WEAPON_BOW'] = Lang:t('damage.bow'),
 	['WEAPON_BOW_IMPROVED'] = Lang:t('damage.bow'),
 	['WEAPON_LASSO'] = Lang:t('damage.placeholder'),
     ['WEAPON_LASSO_REINFORCED'] = Lang:t('damage.placeholder'),
-	['WEAPON_MELEE_KNIFE'] = Lang:t('damage.stab'),	
+	['WEAPON_MELEE_KNIFE'] = Lang:t('damage.stab'),
 	['WEAPON_MELEE_KNIFE_JAWBONE']  = Lang:t('damage.stab'),
 	['WEAPON_MELEE_HAMMER'] = Lang:t('damage.placeholder'),
 	['WEAPON_THROWN_DYNAMITE'] = Lang:t('damage.placeholder'),
@@ -92,7 +92,7 @@ WeaponDamageList = {
 	['WEAPON_MELEE_DAVY_LANTERN'] = Lang:t('damage.hburns'),
 	['WEAPON_MELEE_TORCH'] = Lang:t('damage.hburns'),
 	['WEAPON_MELEE_HATCHET'] = Lang:t('damage.stab'),
-	['WEAPON_MELEE_MACHETE'] = Lang:t('damage.stab'),    
+	['WEAPON_MELEE_MACHETE'] = Lang:t('damage.stab'),
 	['WEAPON_DROWNING'] = Lang:t('damage.drowned'),
 	['WEAPON_DROWNING_IN_VEHICLE'] = Lang:t('damage.drowned'),
 	['WEAPON_BLEEDING'] =  Lang:t('damage.blood'),
@@ -157,14 +157,14 @@ local function DoLimbAlert()
             else
                 limbDamageMsg = Lang:t('info.many_places')
             end
-            QBCore.Functions.Notify(limbDamageMsg, "primary")
+            exports['qbr-core']:Notify(limbDamageMsg, "primary")
         end
     end
 end
 
 local function DoBleedAlert()
     if not isDead and tonumber(isBleeding) > 0 then
-        QBCore.Functions.Notify(Lang:t('info.bleed_alert', {bleedstate = Config.BleedingStates[tonumber(isBleeding)].label}), "error")
+        exports['qbr-core']:Notify(Lang:t('info.bleed_alert', {bleedstate = Config.BleedingStates[tonumber(isBleeding)].label}), "error")
     end
 end
 
@@ -210,16 +210,16 @@ local function IsInjuryCausingLimp()
 end
 
 local function ProcessRunStuff(ped, bone)
-    if bone ~= nil then    
+    if bone ~= nil then
         if IsInjuryCausingLimp() then
             if Config.Bones[bone] == "RLEG" then
                 print("Injured RLEG Walkstyle")
                 Citizen.InvokeNative(0x923583741DC87BCE, ped, 'default')
-                Citizen.InvokeNative(0x89F5E7ADECCCB49C, ped, 'injured_right_leg') 
+                Citizen.InvokeNative(0x89F5E7ADECCCB49C, ped, 'injured_right_leg')
             elseif Config.Bones[bone] == "LLEG" then
                 print("Injured LLEG Walkstyle")
                 Citizen.InvokeNative(0x923583741DC87BCE, ped, 'default')
-                Citizen.InvokeNative(0x89F5E7ADECCCB49C, ped, 'injured_left_leg') 
+                Citizen.InvokeNative(0x89F5E7ADECCCB49C, ped, 'injured_left_leg')
             elseif Config.Bones[bone] == "RARM" then
                 print("Injured RARM Walkstyle")
                 Citizen.InvokeNative(0x923583741DC87BCE, ped, 'default')
@@ -420,8 +420,8 @@ local function CheckWeaponDamage(ped)
     for k, v in pairs(WeaponDamageList) do
         if Citizen.InvokeNative(0xDCF06D0CDFF68424, ped, GetHashKey(k), 0) then --HasPedBeenDamagedByWeapon(
             detected = true
-            if not IsInDamageList(k) then                
-                QBCore.Functions.Notify(Lang:t('info.status')..': '..v, "error")
+            if not IsInDamageList(k) then
+                exports['qbr-core']:Notify(Lang:t('info.status')..': '..v, "error")
                 CurrentDamageList[#CurrentDamageList+1] = k
             end
         end
@@ -609,7 +609,7 @@ RegisterNetEvent('ambulance:client:promptCheckin', function()
     if doctorCount >= Config.MinimalDoctors then
         TriggerServerEvent("hospital:server:SendDoctorAlert")
     else
-        QBCore.Functions.Progressbar("hospital_checkin", Lang:t('progress.checking_in'), 2000, false, true, {
+        exports['qbr-core']:Progressbar("hospital_checkin", Lang:t('progress.checking_in'), 2000, false, true, {
             disableMovement = true,
             disableCarMovement = true,
             disableMouse = false,
@@ -617,13 +617,13 @@ RegisterNetEvent('ambulance:client:promptCheckin', function()
         }, {}, {}, {}, function() -- Done
             local bedId = GetAvailableBed()
             if bedId then
-                
+
                 TriggerServerEvent("hospital:server:SendToBed", bedId, true)
             else
-                QBCore.Functions.Notify(Lang:t('error.beds_taken'), "error")
+                exports['qbr-core']:Notify(Lang:t('error.beds_taken'), "error")
             end
         end, function() -- Cancel
-            QBCore.Functions.Notify(Lang:t('error.canceled'), "error")
+            exports['qbr-core']:Notify(Lang:t('error.canceled'), "error")
         end)
     end
 end)
@@ -632,14 +632,14 @@ RegisterNetEvent('ambulance:client:promptBed',function()
     if GetAvailableBed(closestBed) then
         TriggerServerEvent("hospital:server:SendToBed", closestBed, true)
     else
-        QBCore.Functions.Notify(Lang:t('error.beds_taken'), "error")
+        exports['qbr-core']:Notify(Lang:t('error.beds_taken'), "error")
     end
 end)
 
 RegisterNetEvent('hospital:client:ambulanceAlert', function(coords, text)
-    QBCore.Functions.Notify(text, "ambulance")
+    exports['qbr-core']:Notify(text, "ambulance")
     local transG = 250
-    local blipText = Lang:t('info.ems_alert', {text = text})    
+    local blipText = Lang:t('info.ems_alert', {text = text})
     local blip = N_0x554d9d53f696d002(1664425300, coords.x, coords.y, coords.z) --AddBlip
     SetBlipSprite(blip, 960467426, 1)
     SetBlipScale(blip, 0.2)
@@ -682,7 +682,7 @@ RegisterNetEvent('hospital:client:Revive', function()
     TriggerServerEvent("hospital:server:SetDeathStatus", false)
     TriggerServerEvent("hospital:server:SetLaststandStatus", false)
     emsNotified = false
-    QBCore.Functions.Notify(Lang:t('info.healthy'))
+    exports['qbr-core']:Notify(Lang:t('info.healthy'))
 end)
 
 RegisterNetEvent('hospital:client:SetPain', function()
@@ -724,7 +724,7 @@ RegisterNetEvent('hospital:client:HealInjuries', function(type)
         ResetPartial()
     end
     TriggerServerEvent("hospital:server:RestoreWeaponDamage")
-    QBCore.Functions.Notify(Lang:t('success.wounds_healed'), 'success')
+    exports['qbr-core']:Notify(Lang:t('success.wounds_healed'), 'success')
 end)
 
 RegisterNetEvent('hospital:client:SendToBed', function(id, data, isRevive)
@@ -734,7 +734,7 @@ RegisterNetEvent('hospital:client:SendToBed', function(id, data, isRevive)
     CreateThread(function ()
         Wait(5)
         if isRevive then
-            QBCore.Functions.Notify(Lang:t('success.being_helped'), 'success')
+            exports['qbr-core']:Notify(Lang:t('success.being_helped'), 'success')
             Wait(Config.AIHealTimer * 1000)
             TriggerEvent("hospital:client:Revive")
         else
@@ -758,10 +758,10 @@ end)
 RegisterNetEvent('hospital:client:SendBillEmail', function(amount)
     SetTimeout(math.random(2500, 4000), function()
         local gender = Lang:t('info.mr')
-        if QBCore.Functions.GetPlayerData().charinfo.gender == 1 then
+        if exports['qbr-core']:GetPlayerData().charinfo.gender == 1 then
             gender = Lang:t('info.mrs')
         end
-        local charinfo = QBCore.Functions.GetPlayerData().charinfo
+        local charinfo = exports['qbr-core']:GetPlayerData().charinfo
         TriggerServerEvent('qb-phone:server:sendNewMail', {
             sender = Lang:t('mail.sender'),
             subject = Lang:t('mail.subject'),

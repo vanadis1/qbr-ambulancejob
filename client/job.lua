@@ -16,7 +16,7 @@ local function loadAnimDict(dict)
 end
 
 local function GetClosestPlayer()
-    local closestPlayers = QBCore.Functions.GetPlayersFromCoords()
+    local closestPlayers = exports['qbr-core']:GetPlayersFromCoords()
     local closestDistance = -1
     local closestPlayer = -1
     local coords = GetEntityCoords(PlayerPedId())
@@ -48,13 +48,13 @@ end
 
 function TakeOutVehicle(vehicleInfo)
     local coords = Config.Locations["vehicle"][currentGarage]
-    QBCore.Functions.SpawnVehicle(vehicleInfo, function(veh)
+    exports['qbr-core']:SpawnVehicle(vehicleInfo, function(veh)
         SetEntityHeading(veh, coords.w)
         TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
         if Config.VehicleSettings[vehicleInfo] ~= nil then
             QBCore.Shared.SetDefaultVehicleExtras(veh, Config.VehicleSettings[vehicleInfo].extras)
         end
-        TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
+        TriggerEvent("vehiclekeys:client:SetOwner", exports['qbr-core']:GetPlate(veh))
         SetVehicleEngineOn(veh, true, true)
     end, coords, true)
 end
@@ -67,7 +67,7 @@ function MenuGarage()
         }
     }
 
-    local authorizedVehicles = Config.AuthorizedVehicles[QBCore.Functions.GetPlayerData().job.grade.level]
+    local authorizedVehicles = Config.AuthorizedVehicles[exports['qbr-core']:GetPlayerData().job.grade.level]
     for veh, label in pairs(authorizedVehicles) do
         vehicleMenu[#vehicleMenu+1] = {
             header = label,
@@ -102,91 +102,91 @@ function createAmbuPrompts()
         exports['qbr-prompts']:createPrompt("ambulance:duty:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'On/Off Duty', {
             type = 'client',
             event = 'ambulance:client:promptDuty',
-        })        
+        })
     end
     for k, v in pairs(Config.Locations["vehicle"]) do
         exports['qbr-prompts']:createPrompt("ambulance:vehicle:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'Jobgarage', {
             type = 'client',
             event = 'ambulance:client:promptVehicle',
             args = {k},
-        }) 
-    end    
+        })
+    end
     for k, v in pairs(Config.Locations["stash"]) do
         exports['qbr-prompts']:createPrompt("ambulance:stash:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'Personal Stash', {
             type = 'client',
             event = 'ambulance:client:promptStash',
-        })        
-    end    
+        })
+    end
     for k, v in pairs(Config.Locations["checking"]) do
         exports['qbr-prompts']:createPrompt("ambulance:checkin:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'Check-in', {
             type = 'client',
             event = 'ambulance:client:promptCheckin',
-        })        
+        })
     end
     for k, v in pairs(Config.Locations["beds"]) do
         exports['qbr-prompts']:createPrompt("ambulance:bed:"..k, vector3(Config.Locations["beds"][k].coords.x, Config.Locations["beds"][k].coords.y, Config.Locations["beds"][k].coords.z), Config.PromptKey, Lang:t('text.lie_bed', {cost = Config.BillCost}), {
             type = 'client',
             event = 'ambulance:client:promptBed',
         })
-    end        
+    end
 end
 
 -- Events
 RegisterNetEvent('ambulance:client:promptArmory', function()
-    QBCore.Functions.GetPlayerData(function(PlayerData)
+    exports['qbr-core']:GetPlayerData(function(PlayerData)
         PlayerJob = PlayerData.job
         onDuty = PlayerData.job.onduty
         if PlayerJob.name == "ambulance"  then
             TriggerServerEvent("inventory:server:OpenInventory", "shop", "hospital", Config.Items)
         else
-            QBCore.Functions.Notify(Lang:t('error.not_ems'), 'error')
+            exports['qbr-core']:Notify(Lang:t('error.not_ems'), 'error')
         end
-    end)    
+    end)
 end)
 
 RegisterNetEvent('ambulance:client:promptDuty', function()
-    QBCore.Functions.GetPlayerData(function(PlayerData)
+    exports['qbr-core']:GetPlayerData(function(PlayerData)
         PlayerJob = PlayerData.job
         onDuty = PlayerData.job.onduty
         if PlayerJob.name == "ambulance"  then
             onDuty = not onDuty
             TriggerServerEvent("QBCore:ToggleDuty")
         else
-            QBCore.Functions.Notify(Lang:t('error.not_ems'), 'error')
+            exports['qbr-core']:Notify(Lang:t('error.not_ems'), 'error')
         end
-    end)    
+    end)
 end)
 
 RegisterNetEvent('ambulance:client:promptVehicle', function(k)
-    QBCore.Functions.GetPlayerData(function(PlayerData)
+    exports['qbr-core']:GetPlayerData(function(PlayerData)
         PlayerJob = PlayerData.job
         onDuty = PlayerData.job.onduty
         local ped = PlayerPedId()
 
         if PlayerJob.name == "ambulance"  then
-            if IsPedInAnyVehicle(ped, false) then                
-                QBCore.Functions.DeleteVehicle(GetVehiclePedIsIn(ped))
+            if IsPedInAnyVehicle(ped, false) then
+                exports['qbr-core']:DeleteVehicle(GetVehiclePedIsIn(ped))
             else
                 MenuGarage()
                 currentGarage = k
             end
         else
-            QBCore.Functions.Notify(Lang:t('error.not_ems'), 'error')
+            exports['qbr-core']:Notify(Lang:t('error.not_ems'), 'error')
         end
-    end)    
+    end)
 end)
 
 RegisterNetEvent('ambulance:client:promptStash', function(k)
-    QBCore.Functions.GetPlayerData(function(PlayerData)
+    exports['qbr-core']:GetPlayerData(function(PlayerData)
         PlayerJob = PlayerData.job
         onDuty = PlayerData.job.onduty
         if PlayerJob.name == "ambulance"  then
-            TriggerServerEvent("inventory:server:OpenInventory", "stash", "ambulancestash_"..QBCore.Functions.GetPlayerData().citizenid)
-            TriggerEvent("inventory:client:SetCurrentStash", "ambulancestash_"..QBCore.Functions.GetPlayerData().citizenid)
+            TriggerServerEvent("inventory:server:OpenInventory", "stash", "ambulancestash_"..exports['qbr-core']:GetPlayerData().citizenid)
+            TriggerEvent("inventory:client:SetCurrentStash", "ambulancestash_"..exports['qbr-core']:GetPlayerData().citizenid)
         else
-            QBCore.Functions.Notify(Lang:t('error.not_ems'), 'error')
+            exports['qbr-core']:Notify(Lang:t('error.not_ems'), 'error')
         end
-    end)    
+    end)
 end)
 
 RegisterNetEvent('ambulance:client:TakeOutVehicle', function(data)
@@ -212,7 +212,7 @@ RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     end)
     CreateThread(function()
         Wait(1000)
-        QBCore.Functions.GetPlayerData(function(PlayerData)
+        exports['qbr-core']:GetPlayerData(function(PlayerData)
             PlayerJob = PlayerData.job
             onDuty = PlayerData.job.onduty
             if (not PlayerData.metadata["inlaststand"] and PlayerData.metadata["isdead"]) then
@@ -240,19 +240,19 @@ RegisterNetEvent('hospital:client:CheckStatus', function()
     if player ~= -1 and distance < 5.0 then
         local playerId = GetPlayerServerId(player)
         statusCheckPed = GetPlayerPed(player)
-        QBCore.Functions.TriggerCallback('hospital:GetPlayerStatus', function(result)
+        exports['qbr-core']:TriggerCallback('hospital:GetPlayerStatus', function(result)
             if result then
                 for k, v in pairs(result) do
                     if k ~= "BLEED" and k ~= "WEAPONWOUNDS" then
                         statusChecks[#statusChecks+1] = {bone = Config.BoneIndexes[k], label = v.label .." (".. Config.WoundStates[v.severity] ..")"}
                     elseif result["WEAPONWOUNDS"] then
                         for k, v in pairs(result["WEAPONWOUNDS"]) do
-                            QBCore.Functions.Notify(Lang:t('info.status')..': '..WeaponDamageList[v], 'error')
+                            exports['qbr-core']:Notify(Lang:t('info.status')..': '..WeaponDamageList[v], 'error')
                         end
                     elseif result["BLEED"] > 0 then
-                        QBCore.Functions.Notify(Lang:t('info.status')..': '..Lang:t('info.is_status', {status = Config.BleedingStates[v].label}), 'error')
+                        exports['qbr-core']:Notify(Lang:t('info.status')..': '..Lang:t('info.is_status', {status = Config.BleedingStates[v].label}), 'error')
                     else
-                        QBCore.Functions.Notify(Lang:t('success.healthy_player'), 'success')
+                        exports['qbr-core']:Notify(Lang:t('success.healthy_player'), 'success')
                     end
                 end
                 isStatusChecking = true
@@ -260,18 +260,18 @@ RegisterNetEvent('hospital:client:CheckStatus', function()
             end
         end, playerId)
     else
-        QBCore.Functions.Notify(Lang:t('error.no_player'), 'error')
+        exports['qbr-core']:Notify(Lang:t('error.no_player'), 'error')
     end
 end)
 
 RegisterNetEvent('hospital:client:RevivePlayer', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(hasItem)
+    exports['qbr-core']:TriggerCallback('QBCore:HasItem', function(hasItem)
         if hasItem then
             local player, distance = GetClosestPlayer()
             if player ~= -1 and distance < 5.0 then
                 local playerId = GetPlayerServerId(player)
                 isHealingPerson = true
-                QBCore.Functions.Progressbar("hospital_revive", Lang:t('progress.revive'), 5000, false, true, {
+                exports['qbr-core']:Progressbar("hospital_revive", Lang:t('progress.revive'), 5000, false, true, {
                     disableMovement = false,
                     disableCarMovement = false,
                     disableMouse = false,
@@ -283,30 +283,30 @@ RegisterNetEvent('hospital:client:RevivePlayer', function()
                 }, {}, {}, function() -- Done
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, healAnim, 1.0)
-                    QBCore.Functions.Notify(Lang:t('success.revived'), 'success')
+                    exports['qbr-core']:Notify(Lang:t('success.revived'), 'success')
                     TriggerServerEvent("hospital:server:RevivePlayer", playerId)
                 end, function() -- Cancel
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, healAnim, 1.0)
-                    QBCore.Functions.Notify(Lang:t('error.cancled'), "error")
+                    exports['qbr-core']:Notify(Lang:t('error.cancled'), "error")
                 end)
             else
-                QBCore.Functions.Notify(Lang:t('error.no_player'), "error")
+                exports['qbr-core']:Notify(Lang:t('error.no_player'), "error")
             end
         else
-            QBCore.Functions.Notify(Lang:t('error.no_firstaid'), "error")
+            exports['qbr-core']:Notify(Lang:t('error.no_firstaid'), "error")
         end
     end, 'firstaid')
 end)
 
 RegisterNetEvent('hospital:client:TreatWounds', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(hasItem)
+    exports['qbr-core']:TriggerCallback('QBCore:HasItem', function(hasItem)
         if hasItem then
             local player, distance = GetClosestPlayer()
             if player ~= -1 and distance < 5.0 then
                 local playerId = GetPlayerServerId(player)
                 isHealingPerson = true
-                QBCore.Functions.Progressbar("hospital_healwounds", Lang:t('progress.healing'), 5000, false, true, {
+                exports['qbr-core']:Progressbar("hospital_healwounds", Lang:t('progress.healing'), 5000, false, true, {
                     disableMovement = false,
                     disableCarMovement = false,
                     disableMouse = false,
@@ -318,18 +318,18 @@ RegisterNetEvent('hospital:client:TreatWounds', function()
                 }, {}, {}, function() -- Done
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, healAnim, 1.0)
-                    QBCore.Functions.Notify(Lang:t('success.helped_player'), 'success')
+                    exports['qbr-core']:Notify(Lang:t('success.helped_player'), 'success')
                     TriggerServerEvent("hospital:server:TreatWounds", playerId)
                 end, function() -- Cancel
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, "exit", 1.0)
-                    QBCore.Functions.Notify(Lang:t('error.canceled'), "error")
+                    exports['qbr-core']:Notify(Lang:t('error.canceled'), "error")
                 end)
             else
-                QBCore.Functions.Notify(Lang:t('error.no_player'), "error")
+                exports['qbr-core']:Notify(Lang:t('error.no_player'), "error")
             end
         else
-            QBCore.Functions.Notify(Lang:t('error.no_bandage'), "error")
+            exports['qbr-core']:Notify(Lang:t('error.no_bandage'), "error")
         end
     end, 'bandage')
 end)

@@ -11,7 +11,7 @@ local PainkillersAnim = "bandage_start"
 -- Functions
 local function DoBleedAlert()
     if not isDead and tonumber(isBleeding) > 0 then
-        QBCore.Functions.Notify("You are "..Config.BleedingStates[tonumber(isBleeding)].label, "error", 5000)
+        exports['qbr-core']:Notify("You are "..Config.BleedingStates[tonumber(isBleeding)].label, "error", 5000)
     end
 end
 
@@ -41,7 +41,7 @@ end
 
 RegisterNetEvent('hospital:client:UseIfaks', function()
     local ped = PlayerPedId()
-    QBCore.Functions.Progressbar("use_bandage", Lang:t('progress.ifaks'), 3000, false, true, {
+    exports['qbr-core']:Progressbar("use_bandage", Lang:t('progress.ifaks'), 3000, false, true, {
         disableMovement = false,
         disableCarMovement = false,
 		disableMouse = false,
@@ -65,13 +65,13 @@ RegisterNetEvent('hospital:client:UseIfaks', function()
         end
     end, function() -- Cancel
         StopAnimTask(ped, IfaksDict, IfaksAnim, 1.0)
-        QBCore.Functions.Notify(Lang:t('error.canceled'), "error")
+        exports['qbr-core']:Notify(Lang:t('error.canceled'), "error")
     end)
 end)
 
 RegisterNetEvent('hospital:client:UseBandage', function()
     local ped = PlayerPedId()
-    QBCore.Functions.Progressbar("use_bandage", Lang:t('progress.bandage'), 4000, false, true, {
+    exports['qbr-core']:Progressbar("use_bandage", Lang:t('progress.bandage'), 4000, false, true, {
         disableMovement = false,
         disableCarMovement = false,
 		disableMouse = false,
@@ -93,13 +93,13 @@ RegisterNetEvent('hospital:client:UseBandage', function()
         end
     end, function() -- Cancel
         StopAnimTask(ped, BandageDict, BandageAnim, 1.0)
-        QBCore.Functions.Notify(Lang:t('error.canceled'), "error")
+        exports['qbr-core']:Notify(Lang:t('error.canceled'), "error")
     end)
 end)
 
 RegisterNetEvent('hospital:client:UsePainkillers', function()
     local ped = PlayerPedId()
-    QBCore.Functions.Progressbar("use_bandage", Lang:t('progress.painkillers'), 3000, false, true, {
+    exports['qbr-core']:Progressbar("use_bandage", Lang:t('progress.painkillers'), 3000, false, true, {
         disableMovement = false,
         disableCarMovement = false,
 		disableMouse = false,
@@ -118,7 +118,7 @@ RegisterNetEvent('hospital:client:UsePainkillers', function()
         end
     end, function() -- Cancel
         StopAnimTask(ped, PainkillersDict, PainkillersAnim, 1.0)
-        QBCore.Functions.Notify(Lang:t('error.canceled'), "error")
+        exports['qbr-core']:Notify(Lang:t('error.canceled'), "error")
     end)
 end)
 
@@ -210,7 +210,7 @@ CreateThread(function()
                         local randX = math.random() + math.random(-1, 1)
                         local randY = math.random() + math.random(-1, 1)
                         local coords = GetOffsetFromEntityInWorldCoords(player, randX, randY, 0)
-                        TriggerServerEvent("evidence:server:CreateBloodDrop", QBCore.Functions.GetPlayerData().citizenid, QBCore.Functions.GetPlayerData().metadata["bloodtype"], coords)
+                        TriggerServerEvent("evidence:server:CreateBloodDrop", exports['qbr-core']:GetPlayerData().citizenid, exports['qbr-core']:GetPlayerData().metadata["bloodtype"], coords)
 
                         if advanceBleedTimer >= Config.AdvanceBleedTimer then
                             ApplyBleed(1)
