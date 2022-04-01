@@ -93,38 +93,38 @@ end
 
 function createAmbuPrompts()
     for k, v in pairs(Config.Locations["armory"]) do
-        exports['qbr-prompts']:createPrompt("ambulance:armory:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'Armory', {
+        exports['qbr-core']:createPrompt("ambulance:armory:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'Armory', {
             type = 'client',
             event = 'ambulance:client:promptArmory',
         })
     end
     for k, v in pairs(Config.Locations["duty"]) do
-        exports['qbr-prompts']:createPrompt("ambulance:duty:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'On/Off Duty', {
+        exports['qbr-core']:createPrompt("ambulance:duty:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'On/Off Duty', {
             type = 'client',
             event = 'ambulance:client:promptDuty',
         })
     end
     for k, v in pairs(Config.Locations["vehicle"]) do
-        exports['qbr-prompts']:createPrompt("ambulance:vehicle:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'Jobgarage', {
+        exports['qbr-core']:createPrompt("ambulance:vehicle:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'Jobgarage', {
             type = 'client',
             event = 'ambulance:client:promptVehicle',
             args = {k},
         })
     end
     for k, v in pairs(Config.Locations["stash"]) do
-        exports['qbr-prompts']:createPrompt("ambulance:stash:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'Personal Stash', {
+        exports['qbr-core']:createPrompt("ambulance:stash:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'Personal Stash', {
             type = 'client',
             event = 'ambulance:client:promptStash',
         })
     end
     for k, v in pairs(Config.Locations["checking"]) do
-        exports['qbr-prompts']:createPrompt("ambulance:checkin:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'Check-in', {
+        exports['qbr-core']:createPrompt("ambulance:checkin:"..k, vector3(v.x, v.y, v.z), Config.PromptKey, 'Check-in', {
             type = 'client',
             event = 'ambulance:client:promptCheckin',
         })
     end
     for k, v in pairs(Config.Locations["beds"]) do
-        exports['qbr-prompts']:createPrompt("ambulance:bed:"..k, vector3(Config.Locations["beds"][k].coords.x, Config.Locations["beds"][k].coords.y, Config.Locations["beds"][k].coords.z), Config.PromptKey, Lang:t('text.lie_bed', {cost = Config.BillCost}), {
+        exports['qbr-core']:createPrompt("ambulance:bed:"..k, vector3(Config.Locations["beds"][k].coords.x, Config.Locations["beds"][k].coords.y, Config.Locations["beds"][k].coords.z), Config.PromptKey, Lang:t('text.lie_bed', {cost = Config.BillCost}), {
             type = 'client',
             event = 'ambulance:client:promptBed',
         })
