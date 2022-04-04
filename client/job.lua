@@ -139,7 +139,7 @@ RegisterNetEvent('ambulance:client:promptArmory', function()
         if PlayerJob.name == "ambulance"  then
             TriggerServerEvent("inventory:server:OpenInventory", "shop", "hospital", Config.Items)
         else
-            exports['qbr-core']:Notify(Lang:t('error.not_ems'), 'error')
+            exports['qbr-core']:Notify(9, Lang:t('error.not_ems'), 2000, 0, 'mp_lobby_textures', 'cross')
         end
     end)
 end)
@@ -152,7 +152,7 @@ RegisterNetEvent('ambulance:client:promptDuty', function()
             onDuty = not onDuty
             TriggerServerEvent("QBCore:ToggleDuty")
         else
-            exports['qbr-core']:Notify(Lang:t('error.not_ems'), 'error')
+            exports['qbr-core']:Notify(9, Lang:t('error.not_ems'), 2000, 0, 'mp_lobby_textures', 'cross')
         end
     end)
 end)
@@ -171,7 +171,7 @@ RegisterNetEvent('ambulance:client:promptVehicle', function(k)
                 currentGarage = k
             end
         else
-            exports['qbr-core']:Notify(Lang:t('error.not_ems'), 'error')
+            exports['qbr-core']:Notify(9, Lang:t('error.not_ems'), 2000, 0, 'mp_lobby_textures', 'cross')
         end
     end)
 end)
@@ -184,7 +184,7 @@ RegisterNetEvent('ambulance:client:promptStash', function(k)
             TriggerServerEvent("inventory:server:OpenInventory", "stash", "ambulancestash_"..exports['qbr-core']:GetPlayerData().citizenid)
             TriggerEvent("inventory:client:SetCurrentStash", "ambulancestash_"..exports['qbr-core']:GetPlayerData().citizenid)
         else
-            exports['qbr-core']:Notify(Lang:t('error.not_ems'), 'error')
+            exports['qbr-core']:Notify(9, Lang:t('error.not_ems'), 2000, 0, 'mp_lobby_textures', 'cross')
         end
     end)
 end)
@@ -247,12 +247,12 @@ RegisterNetEvent('hospital:client:CheckStatus', function()
                         statusChecks[#statusChecks+1] = {bone = Config.BoneIndexes[k], label = v.label .." (".. Config.WoundStates[v.severity] ..")"}
                     elseif result["WEAPONWOUNDS"] then
                         for k, v in pairs(result["WEAPONWOUNDS"]) do
-                            exports['qbr-core']:Notify(Lang:t('info.status')..': '..WeaponDamageList[v], 'error')
+                            exports['qbr-core']:Notify(9, Lang:t('info.status')..': '..WeaponDamageList[v], 2000, 0, 'mp_lobby_textures', 'cross')
                         end
                     elseif result["BLEED"] > 0 then
-                        exports['qbr-core']:Notify(Lang:t('info.status')..': '..Lang:t('info.is_status', {status = Config.BleedingStates[v].label}), 'error')
+                        exports['qbr-core']:Notify(9, Lang:t('info.status')..': '..Lang:t('info.is_status', {status = Config.BleedingStates[v].label}), 2000, 0, 'mp_lobby_textures', 'cross')
                     else
-                        exports['qbr-core']:Notify(Lang:t('success.healthy_player'), 'success')
+                        exports['qbr-core']:Notify(9, Lang:t('success.healthy_player'), 2000, 0, 'hud_textures', 'check')
                     end
                 end
                 isStatusChecking = true
@@ -260,7 +260,7 @@ RegisterNetEvent('hospital:client:CheckStatus', function()
             end
         end, playerId)
     else
-        exports['qbr-core']:Notify(Lang:t('error.no_player'), 'error')
+        exports['qbr-core']:Notify(9, Lang:t('error.no_player'), 2000, 0, 'mp_lobby_textures', 'cross')
     end
 end)
 
@@ -283,18 +283,18 @@ RegisterNetEvent('hospital:client:RevivePlayer', function()
                 }, {}, {}, function() -- Done
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, healAnim, 1.0)
-                    exports['qbr-core']:Notify(Lang:t('success.revived'), 'success')
+                    exports['qbr-core']:Notify(9, Lang:t('success.revived'), 2000, 0, 'hud_textures', 'check')
                     TriggerServerEvent("hospital:server:RevivePlayer", playerId)
                 end, function() -- Cancel
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, healAnim, 1.0)
-                    exports['qbr-core']:Notify(Lang:t('error.cancled'), "error")
+                    exports['qbr-core']:Notify(9, Lang:t('error.cancled'), 2000, 0, 'mp_lobby_textures', 'cross')
                 end)
             else
-                exports['qbr-core']:Notify(Lang:t('error.no_player'), "error")
+                exports['qbr-core']:Notify(9, Lang:t('error.no_player'), 2000, 0, 'mp_lobby_textures', 'cross')
             end
         else
-            exports['qbr-core']:Notify(Lang:t('error.no_firstaid'), "error")
+            exports['qbr-core']:Notify(9, Lang:t('error.no_firstaid'), 2000, 0, 'mp_lobby_textures', 'cross')
         end
     end, 'firstaid')
 end)
@@ -318,18 +318,18 @@ RegisterNetEvent('hospital:client:TreatWounds', function()
                 }, {}, {}, function() -- Done
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, healAnim, 1.0)
-                    exports['qbr-core']:Notify(Lang:t('success.helped_player'), 'success')
+                    exports['qbr-core']:Notify(9, Lang:t('success.helped_player'), 2000, 0, 'hud_textures', 'check')
                     TriggerServerEvent("hospital:server:TreatWounds", playerId)
                 end, function() -- Cancel
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, "exit", 1.0)
-                    exports['qbr-core']:Notify(Lang:t('error.canceled'), "error")
+                    exports['qbr-core']:Notify(9, Lang:t('error.canceled'), 2000, 0, 'mp_lobby_textures', 'cross')
                 end)
             else
-                exports['qbr-core']:Notify(Lang:t('error.no_player'), "error")
+                exports['qbr-core']:Notify(9, Lang:t('error.no_player'), 2000, 0, 'mp_lobby_textures', 'cross')
             end
         else
-            exports['qbr-core']:Notify(Lang:t('error.no_bandage'), "error")
+            exports['qbr-core']:Notify(9, Lang:t('error.no_bandage'), 2000, 0, 'mp_lobby_textures', 'cross')
         end
     end, 'bandage')
 end)

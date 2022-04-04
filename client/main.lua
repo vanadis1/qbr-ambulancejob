@@ -157,14 +157,14 @@ local function DoLimbAlert()
             else
                 limbDamageMsg = Lang:t('info.many_places')
             end
-            exports['qbr-core']:Notify(limbDamageMsg, "primary")
+            exports['qbr-core']:Notify(9, limbDamageMsg, 2000, 0, 'blips', 'blip_radius_search')
         end
     end
 end
 
 local function DoBleedAlert()
     if not isDead and tonumber(isBleeding) > 0 then
-        exports['qbr-core']:Notify(Lang:t('info.bleed_alert', {bleedstate = Config.BleedingStates[tonumber(isBleeding)].label}), "error")
+        exports['qbr-core']:Notify(9, Lang:t('info.bleed_alert', {bleedstate = Config.BleedingStates[tonumber(isBleeding)].label}), 2000, 0, 'mp_lobby_textures', 'cross')
     end
 end
 
@@ -421,7 +421,7 @@ local function CheckWeaponDamage(ped)
         if Citizen.InvokeNative(0xDCF06D0CDFF68424, ped, GetHashKey(k), 0) then --HasPedBeenDamagedByWeapon(
             detected = true
             if not IsInDamageList(k) then
-                exports['qbr-core']:Notify(Lang:t('info.status')..': '..v, "error")
+                exports['qbr-core']:Notify(9, Lang:t('info.status')..': '..v, 2000, 0, 'mp_lobby_textures', 'cross')
                 CurrentDamageList[#CurrentDamageList+1] = k
             end
         end
@@ -620,10 +620,10 @@ RegisterNetEvent('ambulance:client:promptCheckin', function()
 
                 TriggerServerEvent("hospital:server:SendToBed", bedId, true)
             else
-                exports['qbr-core']:Notify(Lang:t('error.beds_taken'), "error")
+                exports['qbr-core']:Notify(9, Lang:t('error.beds_taken'), 2000, 0, 'mp_lobby_textures', 'cross')
             end
         end, function() -- Cancel
-            exports['qbr-core']:Notify(Lang:t('error.canceled'), "error")
+            exports['qbr-core']:Notify(9, Lang:t('error.canceled'), 2000, 0, 'mp_lobby_textures', 'cross')
         end)
     end
 end)
@@ -632,12 +632,12 @@ RegisterNetEvent('ambulance:client:promptBed',function()
     if GetAvailableBed(closestBed) then
         TriggerServerEvent("hospital:server:SendToBed", closestBed, true)
     else
-        exports['qbr-core']:Notify(Lang:t('error.beds_taken'), "error")
+        exports['qbr-core']:Notify(9, Lang:t('error.beds_taken'), 2000, 0, 'mp_lobby_textures', 'cross')
     end
 end)
 
 RegisterNetEvent('hospital:client:ambulanceAlert', function(coords, text)
-    exports['qbr-core']:Notify(text, "ambulance")
+    exports['qbr-core']:Notify(9, text, "ambulance")
     local transG = 250
     local blipText = Lang:t('info.ems_alert', {text = text})
     local blip = N_0x554d9d53f696d002(1664425300, coords.x, coords.y, coords.z) --AddBlip
@@ -682,7 +682,7 @@ RegisterNetEvent('hospital:client:Revive', function()
     TriggerServerEvent("hospital:server:SetDeathStatus", false)
     TriggerServerEvent("hospital:server:SetLaststandStatus", false)
     emsNotified = false
-    exports['qbr-core']:Notify(Lang:t('info.healthy'))
+    exports['qbr-core']:Notify(9, Lang:t('info.healthy'), 2000, 0, 'blips', 'blip_radius_search')
 end)
 
 RegisterNetEvent('hospital:client:SetPain', function()
@@ -724,7 +724,7 @@ RegisterNetEvent('hospital:client:HealInjuries', function(type)
         ResetPartial()
     end
     TriggerServerEvent("hospital:server:RestoreWeaponDamage")
-    exports['qbr-core']:Notify(Lang:t('success.wounds_healed'), 'success')
+    exports['qbr-core']:Notify(9, Lang:t('success.wounds_healed'), 2000, 0, 'hud_textures', 'check')
 end)
 
 RegisterNetEvent('hospital:client:SendToBed', function(id, data, isRevive)
@@ -734,7 +734,7 @@ RegisterNetEvent('hospital:client:SendToBed', function(id, data, isRevive)
     CreateThread(function ()
         Wait(5)
         if isRevive then
-            exports['qbr-core']:Notify(Lang:t('success.being_helped'), 'success')
+            exports['qbr-core']:Notify(9, Lang:t('success.being_helped'), 2000, 0, 'hud_textures', 'check')
             Wait(Config.AIHealTimer * 1000)
             TriggerEvent("hospital:client:Revive")
         else
